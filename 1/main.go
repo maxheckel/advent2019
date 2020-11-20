@@ -8,6 +8,39 @@ import (
 	"strings"
 )
 
+func main() {
+	inputsArr := strings.Split(inputsStr, "\n")
+	baseTotal := 0
+	fuelTotal := 0
+	for _, input := range inputsArr{
+		inputFloat, err := strconv.ParseFloat(input, 32)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fuelForMass := calcFuelForMass(inputFloat)
+		baseTotal += fuelForMass
+		_, fuelToAdd := calcFuelForFuel(float64(fuelForMass), float64(fuelForMass))
+		fuelTotal += int(fuelToAdd)
+	}
+
+	fmt.Println(fmt.Sprintf("Part 1 Total: %d", baseTotal))
+	fmt.Println(fmt.Sprintf("Part 2 Total: %d", fuelTotal))
+}
+
+func calcFuelForMass(mass float64) int {
+	return int(math.Floor(mass/3) - 2)
+}
+
+func calcFuelForFuel(fuel float64, runningTotal float64) (float64, float64){
+	// If less than 7 then we know it's zero, no calculation needed
+	if fuel < 7 {
+		return 0.0, runningTotal
+	}
+	newFuel := float64(calcFuelForMass(fuel))
+	runningTotal+=newFuel
+	return calcFuelForFuel(newFuel, runningTotal)
+}
+
 const inputsStr = `146561
 98430
 131957
@@ -108,36 +141,3 @@ const inputsStr = `146561
 78307
 111855
 130153`
-
-func main() {
-	inputsArr := strings.Split(inputsStr, "\n")
-	baseTotal := 0
-	fuelTotal := 0
-	for _, input := range inputsArr{
-		inputFloat, err := strconv.ParseFloat(input, 32)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fuelForMass := calcFuelForMass(inputFloat)
-		baseTotal += fuelForMass
-		_, fuelToAdd := calcFuelForFuel(float64(fuelForMass), float64(fuelForMass))
-		fuelTotal += int(fuelToAdd)
-	}
-
-	fmt.Println(fmt.Sprintf("Part 1 Total: %d", baseTotal))
-	fmt.Println(fmt.Sprintf("Part 2 Total: %d", fuelTotal))
-}
-
-func calcFuelForMass(mass float64) int {
-	return int(math.Floor(mass/3) - 2)
-}
-
-func calcFuelForFuel(fuel float64, runningTotal float64) (float64, float64){
-	// If less than 7 then we know it's zero, no calculation needed
-	if fuel < 7 {
-		return 0.0, runningTotal
-	}
-	newFuel := float64(calcFuelForMass(fuel))
-	runningTotal+=newFuel
-	return calcFuelForFuel(newFuel, runningTotal)
-}
