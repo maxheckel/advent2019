@@ -19,8 +19,8 @@ func main() {
 	arrToUse := make([]int, len(inputIntArr))
 	copy(arrToUse, inputIntArr)
 
-	res1Arr := executeProgram(arrToUse)
-	fmt.Printf("Part 1: %d\n", res1Arr[0])
+	res1 := executeProgram(arrToUse)
+	fmt.Printf("Part 1: %d\n", res1)
 	goal := 19690720
 
 	for i := 0; i < len(inputIntArr); i++ {
@@ -29,8 +29,8 @@ func main() {
 			inputIntArr[2] = j
 			arrToUse := make([]int, len(inputIntArr))
 			copy(arrToUse, inputIntArr)
-			checkArr := executeProgram(arrToUse)
-			if checkArr[0] == goal {
+			res := executeProgram(arrToUse)
+			if res == goal {
 				fmt.Printf("Part 2: %d", 100*i+j)
 			}
 		}
@@ -38,7 +38,7 @@ func main() {
 
 }
 
-func executeProgram(inputIntArr []int) []int {
+func executeProgram(inputIntArr []int) int {
 	halting := false
 	for x := 0; x < len(inputIntArr)/4; x++ {
 		var ints [4]int
@@ -48,7 +48,7 @@ func executeProgram(inputIntArr []int) []int {
 			break
 		}
 	}
-	return inputIntArr
+	return inputIntArr[0]
 }
 
 func performOperation(slice [4]int, input []int) (output []int, halting bool){
