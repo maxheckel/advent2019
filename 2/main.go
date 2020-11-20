@@ -16,8 +16,10 @@ func main() {
 		intVal, _ := strconv.Atoi(inputStrArr[i])
 		inputIntArr = append(inputIntArr, intVal)
 	}
+	arrToUse := make([]int, len(inputIntArr))
+	copy(arrToUse, inputIntArr)
 
-	res1Arr := executeProgram(inputIntArr)
+	res1Arr := executeProgram(arrToUse)
 	fmt.Printf("Part 1: %d\n", res1Arr[0])
 	goal := 19690720
 
@@ -25,8 +27,9 @@ func main() {
 		for j := 0; j < len(inputIntArr); j++ {
 			inputIntArr[1] = i
 			inputIntArr[2] = j
-
-			checkArr := executeProgram(inputIntArr)
+			arrToUse := make([]int, len(inputIntArr))
+			copy(arrToUse, inputIntArr)
+			checkArr := executeProgram(arrToUse)
 			if checkArr[0] == goal {
 				fmt.Printf("Part 2: %d", 100*i+j)
 			}
@@ -37,21 +40,18 @@ func main() {
 
 func executeProgram(inputIntArr []int) []int {
 	halting := false
-	arrToUse := make([]int, len(inputIntArr))
-	copy(arrToUse, inputIntArr)
-
-	for x := 0; x < len(arrToUse)/4; x++ {
+	for x := 0; x < len(inputIntArr)/4; x++ {
 		var ints [4]int
-		copy(ints[:4], arrToUse[x*4:x*4+4])
-		arrToUse, halting = performOperation(ints, arrToUse)
+		copy(ints[:4], inputIntArr[x*4:x*4+4])
+		inputIntArr, halting = performOperation(ints, inputIntArr)
 		if halting {
 			break
 		}
 	}
-	return arrToUse
+	return inputIntArr
 }
 
-func performOperation(slice[4]int, input []int) (output []int, halting bool){
+func performOperation(slice [4]int, input []int) (output []int, halting bool){
 	operation := slice[0]
 	pos1 := slice[1]
 	pos2 := slice[2]
